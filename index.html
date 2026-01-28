@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SUBSTREAM - Accueil</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+</head>
+<body>
+  <div class="page">
+
+    <!-- HEADER -->
+    <header>
+      {% set current_endpoint = request.endpoint %}
+      <div class="logo">SUBSTREAM</div>
+      <nav>
+        <a href="{{ url_for('index') }}" class="{% if current_endpoint == 'index' %}active{% endif %}">Accueil</a>
+        <a href="{{ url_for('maliste') }}">Ma Liste</a>
+        <a href="{{ url_for('mesnotations') }}" class="{% if current_endpoint == 'mesnotations' %}active{% endif %}">Mes notations</a>
+      </nav>
+      {% if session.get("user") %}
+        <a class="login-btn" href="{{ url_for('logout') }}">Se déconnecter</a>
+      {% else %}
+        <a class="login-btn" href="{{ url_for('login') }}">Se connecter</a>
+      {% endif %}
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section
+        class="hero"
+        id="hero"
+        data-hero-images='{{ hero_urls|tojson }}'
+      >
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-content-wrapper">
+          <div class="hero-content">
+            <h1>Rechercher des séries TV</h1>
+            <p>Immersion totale – trouve ta prochaine série préférée.</p>
+            <div class="search-box">
+              <div class="search-wrapper">
+                <div class="search-inner">
+                  <span class="search-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="11" cy="11" r="7"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                  </span>
+                  <input
+                    id="search"
+                    class="search-input"
+                    type="search"
+                    placeholder="Rechercher des mots-clés dans les sous-titres…"
+                    aria-label="Recherche"
+                  >
+                </div>
+              </div>
+              <button id="searchBtn" class="search-btn">Rechercher</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULTATS / SERIES TENDANCE (remplis côté JS via /api/series) -->
+      <section class="series-section" aria-live="polite">
+        <div id="resultsContainer">
+          <h2 id="seriesTitle">Séries tendance</h2>
+          {% for row in [series[:40], series[40:80]] %}
+          <div class="series-row">
+            <button class="arrow left" aria-label="Défiler vers la gauche">&#10094;</button>
+            <div class="series-list">
+              {% for s in row %}
+              <a href="{{ url_for('series_detail', series_id=s['id']) }}" class="series-card">
+                <div class="card-img-wrapper">
+                  <img src="{{ s['image_url'] }}" alt="Affiche de la série {{ s['name'] }}">
+                </div>
+                <div class="series-overlay">
+                  <h3 class="series-name">{{ s['name'] }}</h3>
+                  <p class="synopsis">{{ (s['synopsis'] or '')[:120] }}{% if s['synopsis'] and s['synopsis']|length > 120 %}…{% endif %}</p>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+            <button class="arrow right" aria-label="Défiler vers la droite">&#10095;</button>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      {% if session.get("user") %}
+      <!-- RECOMMANDATIONS PERSO -->
+      <section class="series-section" aria-live="polite" id="personalRecommendations" hidden>
+        <h2>Recommandées pour toi</h2>
+        <div class="series-row">
+          <div class="series-list" id="personalList"></div>
+        </div>
+      </section>
+      {% endif %}
+    </main>
+
+    {% include "footer.html" %}
+  </div>
+
+  <!-- Script principal de la page d'accueil -->
+  <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
+</body>
+</html>
+

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes notations - SUBSTREAM</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/maliste.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="logo">SUBSTREAM</div>
+  <nav>
+    <a href="{{ url_for('index') }}">Accueil</a>
+    <a href="{{ url_for('maliste') }}">Ma Liste</a>
+    <a href="{{ url_for('mesnotations') }}" class="active">Mes notations</a>
+  </nav>
+  {% if session.get("user") %}
+    <a class="logout-btn" href="{{ url_for('logout') }}">Se déconnecter</a>
+  {% else %}
+    <a class="login-btn" href="{{ url_for('login') }}">Se connecter</a>
+  {% endif %}
+</header>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>Mes notations</h1>
+    <p>Vos notes personnelles et la moyenne globale des séries.</p>
+  </div>
+</section>
+
+<main class="mylist-main">
+  <div id="ratingsGrid" class="mylist-grid"></div>
+  <p id="emptyMsg" class="empty-msg" style="display:none;">Aucune note pour l’instant.</p>
+</main>
+
+{% include "footer.html" %}
+
+</div>
+
+<script src="{{ url_for('static', filename='js/mesnotations.js') }}"></script>
+</body>
+</html>

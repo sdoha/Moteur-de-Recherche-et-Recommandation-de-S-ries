@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SUBSTREAM — Inscription</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+</head>
+<body>
+
+<!-- FORMULAIRE INSCRIPTION -->
+<main class="container">
+  <section class="card">
+    <h1 class="brand">SUBSTREAM</h1>
+    <p class="subtitle">Rejoins-nous pour suivre tes séries favorites.</p>
+
+    {% if errors %}
+      <div class="errors" role="alert">
+        {% for e in errors %} {{ e }}<br> {% endfor %}
+      </div>
+    {% endif %}
+
+    <form id="signupForm" method="post" action="{{ url_for('signup') }}" class="form">
+      <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+      <input type="email" name="email" placeholder="Adresse email" required>
+      <input type="password" name="password" placeholder="Mot de passe" required>
+      <input type="password" name="confirm_password" placeholder="Confirmer le mot de passe" required>
+      <button type="submit" class="btn">Créer un compte</button>
+    </form>
+
+    <div class="footer-link">
+      <a href="{{ url_for('login') }}">Déjà inscrit ? Se connecter</a>
+    </div>
+  </section>
+</main>
+
+  <script src="{{ url_for('static', filename='js/signup.js') }}" defer></script>
+</body>
+</html>
