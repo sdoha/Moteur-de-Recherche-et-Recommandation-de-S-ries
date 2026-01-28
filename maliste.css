@@ -1,0 +1,552 @@
+﻿:root {
+  --primary: #e50914;
+  --secondary: #f48C06;
+  --accent: #f5c518;
+  --bg: #0a0a0a;
+  --card-bg: rgba(255,255,255,0.05);
+  --text: #fff;
+  --shadow-glow: rgba(225,29,38,0.4);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+.page{display:flex;flex-direction:column;min-height:100vh;}
+
+/* HEADER (copiÃ© de ton style.css) */
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 40px;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top: 0;
+  z-index: 60;
+}
+.logo { color: var(--secondary); font-weight:800; font-size:24px; letter-spacing:1px; }
+nav { flex:1; margin-left:28px; }
+nav a {
+  color: var(--text);
+  text-decoration: none;
+  margin: 0 14px;
+  opacity: .95;
+  font-size: 15px;
+}
+nav a.active, nav a:hover { border-bottom: none; color: #f48c06; }
+/* Boutons */
+.login-btn, .logout-btn {
+  background: linear-gradient(135deg, var(--accent), #ff4b3e);
+  color:#fff;
+  padding:8px 18px;
+  border-radius:25px;
+  font-weight:700;
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  text-decoration:none;
+  box-shadow:0 4px 12px rgba(225,29,38,0.3);
+  transition:all 0.3s ease;
+}
+.login-btn:hover, .logout-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: linear-gradient(135deg, #ff4b3e, var(--accent));
+  box-shadow:0 0 15px rgba(225,29,38,0.8), 0 0 30px rgba(255,75,62,0.6);
+}
+.logout-btn {
+  background: linear-gradient(135deg, #444, #222);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.logout-btn:hover {
+  background: linear-gradient(135deg, #222, #444);
+  box-shadow: 0 0 15px rgba(255,255,255,0.3), 0 0 30px rgba(200,200,200,0.2);
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  height: 50vh;              /* plus petit (au lieu de 65vh) */
+  min-height: 220px;         /* minimum pour mobiles */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background: linear-gradient(120deg, #0a0a0a, #1a1a1a, #111);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.07), transparent 70%);
+  animation: spotlightMove 12s ease-in-out infinite;
+  z-index: 1;
+}
+
+.hero-text {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 10px 20px;
+}
+
+.hero-text h1 {
+  font-size: 2.8rem;        /* taille rÃ©duite */
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #fff, #ff4b3e, #fff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 4s linear infinite;
+  margin-bottom: 12px;
+}
+
+.hero-text p {
+  font-size: 1.1rem;       /* plus discret */
+  color: #ddd;
+  line-height: 1.4;
+}
+
+/* Animations */
+@keyframes spotlightMove {
+  0%, 100% { background-position: 50% 50%; }
+  50% { background-position: 80% 20%; }
+}
+@keyframes shine {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* Responsive */
+@media(max-width:1000px){
+  .hero { height: 28vh; }
+  .hero-text h1 { font-size: 2.2rem; }
+  .hero-text p { font-size: 1rem; }
+}
+@media(max-width:600px){
+  .hero { height: 24vh; min-height: 160px; }
+  .hero-text h1 { font-size: 1.6rem; }
+}
+
+
+.mylist-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+/* Carte */
+.mylist-card {
+  position: relative;
+  width: 220px;
+  height: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(40px) scale(0.95) rotateX(8deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotateX(0); }
+}
+
+/* Image avec reflet diagonal */
+.mylist-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  transition: transform 0.6s ease;
+  position: relative;
+  z-index: 1;
+}
+.mylist-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.15) 40%, transparent 60%);
+  transform: rotate(25deg);
+  transition: opacity 0.3s;
+  opacity: 0;
+  z-index: 2;
+}
+.mylist-card:hover::after {
+  animation: shineMove 1.5s forwards;
+  opacity: 1;
+}
+@keyframes shineMove {
+  from { transform: translateX(-100%) rotate(25deg); }
+  to   { transform: translateX(100%) rotate(25deg); }
+}
+
+.mylist-card:hover img {
+  transform: scale(1.08);
+}
+
+/* Overlay */
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 18px;
+  text-align: center;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  transform: translateY(100%);
+  transition: transform 0.5s ease;
+  z-index: 3;
+}
+.mylist-card:hover .card-overlay {
+  transform: translateY(0);
+}
+
+/* TITRE brillant */
+.card-overlay h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+.mylist-card:hover .card-overlay h3 {
+  background: linear-gradient(90deg, #e50914, #ff4b3e, #ffffff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShine 2.5s linear infinite;
+  transform: scale(1.08);
+}
+@keyframes textShine {
+  to { background-position: -200% center; }
+}
+
+/* Boutons */
+.card-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.view-btn, .remove-btn {
+  padding: 7px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: #fff;
+  text-decoration: none;
+}
+.view-btn {
+  background: var(--primary);
+  box-shadow: 0 0 10px rgba(229,9,20,0.5);
+  animation: pulseGlow 2s infinite;
+}
+.view-btn:hover {
+  background: #ff1a2c;
+  transform: scale(1.07);
+}
+.remove-btn {
+  background: #333;
+}
+.remove-btn:hover {
+  background: #555;
+  transform: scale(1.07);
+}
+
+/* Effet glow */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(229,9,20,0.5); }
+  50% { box-shadow: 0 0 16px rgba(229,9,20,0.8); }
+}
+
+/* Hover global */
+.mylist-card:hover {
+  transform: translateY(-12px) scale(1.04);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.85), 0 0 25px rgba(229,9,20,0.4);
+}
+
+/* Boutons */
+.card-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.view-btn, .remove-btn {
+  padding: 7px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: #fff;
+  text-decoration: none;
+}
+.view-btn {
+  background: var(--primary);
+  box-shadow: 0 0 10px rgba(229,9,20,0.5);
+}
+.view-btn:hover {
+  background: #ff1a2c;
+  transform: scale(1.05);
+}
+.remove-btn {
+  background: #333;
+}
+.remove-btn:hover {
+  background: #555;
+  transform: scale(1.05);
+}
+
+/* Hover premium */
+.mylist-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 25px rgba(229,9,20,0.4);
+}
+
+/* HERO */
+.hero{
+  display:flex;align-items:center;justify-content:center;
+  padding:100px 60px;
+  background: linear-gradient(270deg, #e50914, #111, #f48C06);
+  background-size: 600% 600%;
+  animation: gradientFlow 12s ease infinite;
+  text-align:center;
+}
+.hero-text h1{
+  font-size:4rem;font-weight:900;line-height:1.1;
+  margin-bottom:20px;letter-spacing:1px;
+}
+.hero-text p{font-size:1.4rem;color:#eee;line-height:1.4;}
+@keyframes gradientFlow {
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* MAIN */
+.mylist-main{flex:1;padding:60px 80px;}
+.mylist-grid{
+  display:flex;flex-wrap:wrap;gap:30px;justify-content:center;
+  perspective: 1200px; /* important pour l'effet 3D */
+}
+.mylist-card{
+  position:relative;
+  width:220px;
+  border-radius:18px;
+  overflow:hidden;
+  background:var(--card-bg);
+  backdrop-filter:blur(12px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.7);
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease, box-shadow 0.4s ease;
+  animation: fadeSlideRotate 0.8s ease forwards;
+  opacity: 0;
+}
+@keyframes fadeSlideRotate {
+  0% { opacity:0; transform: translateY(40px) rotateX(10deg) rotateY(-10deg) scale(0.95);}
+  100% { opacity:1; transform: translateY(0) rotateX(0) rotateY(0) scale(1);}
+}
+.mylist-card img{
+  width:100%;height:320px;object-fit:cover;
+  transition: transform 0.5s;
+}
+.mylist-card:hover img{transform: scale(1.1);}
+
+/* Overlay */
+.card-overlay h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff; /* blanc par dÃ©faut */
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Effet hover sur la carte */
+.mylist-card:hover .card-overlay h3 {
+  background: linear-gradient(90deg, #e50914, #ff4b3e, #ffffff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShine 2s linear infinite;
+}
+
+/* Animation de lumiÃ¨re qui passe */
+@keyframes textShine {
+  to { background-position: -200% center; }
+}
+
+.card-actions{display:flex;gap:10px;justify-content:center;}
+.view-btn, .remove-btn{
+  padding:8px 14px;border-radius:12px;font-weight:600;border:none;cursor:pointer;
+  transition:0.3s;text-decoration:none;color:#fff;
+}
+.view-btn{background:var(--primary);}
+.view-btn:hover{background:#ff1a2c;transform:scale(1.05);}
+.remove-btn{background:#444;}
+.remove-btn:hover{background:#666;transform:scale(1.05);}
+
+/* EMPTY */
+.empty-msg{
+  text-align:center;
+  font-size:1.5rem;
+  color:#bbb;
+  margin-top:100px;
+}
+
+
+
+/* RESPONSIVE */
+@media(max-width:1000px){
+  .hero{padding:80px 20px;}
+  .hero-text h1{font-size:2.5rem;}
+  .hero-text p{font-size:1rem;}
+}
+@media(max-width:600px){
+  .mylist-main{padding:40px 20px;}
+  .mylist-card{width:160px;}
+  .mylist-card img{height:220px;}
+}
+/* MODAL STYLÃ‰ */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: #181818;
+  padding: 30px;
+  border-radius: 14px;
+  text-align: center;
+  color: #fff;
+  width: 350px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+  transform: scale(0.8);
+  animation: popIn 0.35s ease forwards;
+}
+
+.modal-content h2 {
+  margin-bottom: 12px;
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+.modal-content p {
+  margin-bottom: 20px;
+  color: #ddd;
+  font-size: 1rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.modal-actions button {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+}
+
+#cancel-btn {
+  background: #333;
+  color: #fff;
+}
+
+#confirm-btn {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(229,9,20,0.4);
+}
+
+.modal-actions button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* TOAST */
+#toast-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 3500;
+}
+
+.toast {
+  background: #222;
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+  transform: translateX(120%);
+  opacity: 0;
+  animation: slideIn 0.5s ease forwards, fadeOut 0.6s ease 3s forwards;
+}
+
+.toast.success {
+  background: linear-gradient(135deg, var(--primary), #111);
+  border-left: 5px solid var(--primary);
+}
+
+.toast.error {
+  background: linear-gradient(135deg, #ff1a2c, #111);
+  border-left: 5px solid #ff1a2c;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateX(120%); }
+}
+
+

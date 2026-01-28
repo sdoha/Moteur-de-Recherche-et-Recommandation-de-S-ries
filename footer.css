@@ -1,0 +1,57 @@
+/* FOOTER PREMIUM */
+.footer {
+  background: #0a0a0a;
+  padding: 40px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-line {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #e50914, transparent);
+  animation: moveLine 3s linear infinite;
+}
+
+@keyframes moveLine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.footer-content {
+  max-width: 900px;
+  margin: 20px auto 0;
+}
+
+.footer-content p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #bbb;
+}
+
+.footer-content p:first-child {
+  color: #fff;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.team-names {
+  font-weight: 600;
+  color: #e50914;
+  text-shadow: 0 0 6px rgba(229, 9, 20, 0.6),
+    0 0 12px rgba(229, 9, 20, 0.4);
+  animation: pulseGlow 3s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  from {
+    text-shadow: 0 0 6px rgba(229, 9, 20, 0.5);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(229, 9, 20, 1);
+  }
+}
