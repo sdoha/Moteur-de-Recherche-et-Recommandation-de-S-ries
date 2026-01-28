@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SUBSTREAM — Connexion</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+
+  <div class="bg" aria-hidden="true"></div>
+
+  <!-- SPLASH INTRO -->
+  <div id="splash" class="splash" role="dialog" aria-label="Intro SUBSTREAM">
+    <div class="splash-title">SUBSTREAM</div>
+    <div class="splash-sub">Bienvenue dans ton univers séries</div>
+    <canvas id="splash-canvas" aria-hidden="true"></canvas>
+  </div>
+
+  <!-- FORMULAIRE CONNEXION -->
+  <main class="login-wrap" id="loginWrap" aria-live="polite">
+    <div class="login-card" role="form" aria-labelledby="brand">
+      <div id="brand" class="brand">SUBSTREAM</div>
+      <div class="card-sub">Connecte-toi pour retrouver tes séries et ta liste.</div>
+
+      {% if errors %}
+        <div class="errors" role="alert">
+          {% for e in errors %}
+            {{ e }}<br>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form id="loginForm" method="post" action="{{ url_for('login') }}" autocomplete="on" style="width:100%;">
+        <div class="field">
+          <label for="username" class="sr-only">Nom d'utilisateur</label>
+          <input id="username" name="username" type="text" placeholder="Nom d'utilisateur" required autofocus>
+        </div>
+        <div class="field">
+          <label for="password" class="sr-only">Mot de passe</label>
+          <input id="password" name="password" type="password" placeholder="Mot de passe" required>
+        </div>
+        <button type="submit" class="btn">Se connecter</button>
+        <div class="links">
+          <a href="{{ url_for('signup') }}">Créer un compte</a>
+          <a href="{{ url_for('forgot_password') }}">Mot de passe oublié ?</a>
+        </div>
+      </form>
+      <div id="loginErrors" class="errors" role="alert" style="display:none;"></div>
+    </div>
+  </main>
+
+  <!-- Script page login -->
+  <script src="{{ url_for('static', filename='js/login.js') }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ma Liste — SUBSTREAM</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/maliste.css') }}">
+</head>
+<body>
+<div class="page">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+
+<!-- HEADER (identique à l'accueil) -->
+<header>
+  <div class="logo">SUBSTREAM</div>
+  <nav>
+    <a href="{{ url_for('index') }}">Accueil</a>
+    <a href="{{ url_for('maliste') }}" class="active">Ma Liste</a>
+    <a href="{{ url_for('mesnotations') }}">Mes notations</a>
+  </nav>
+  {% if session.get("user") %}
+    <a class="logout-btn" href="{{ url_for('logout') }}">Se déconnecter</a>
+  {% else %}
+    <a class="login-btn" href="{{ url_for('login') }}">Se connecter</a>
+  {% endif %}
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <h1>Vos Séries Favorites</h1>
+    <p>Retrouvez toutes vos séries préférées, prêtes à être regardées.</p>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="mylist-main">
+  {% if mylist %}
+  <div class="mylist-grid">
+    {% for serie in mylist %}
+      <div class="mylist-card">
+        <img src="{{ serie['image_url'] }}" alt="{{ serie['name'] }}">
+        <div class="card-overlay">
+          <h3>{{ serie['name'] }}</h3>
+          <div class="card-actions">
+            <a class="view-btn" href="{{ url_for('series_detail', series_id=serie['id']) }}">Voir</a>
+            <button class="remove-btn" data-serie="{{ serie['id'] }}">Retirer</button>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <p class="empty-msg">✨ Votre liste est vide. Ajoutez vos séries préférées depuis la page détail !</p>
+  {% endif %}
+</main>
+
+{% include "footer.html" %}
+
+
+<script src="{{ url_for('static', filename='js/maliste.js') }}"></script>
+
+<!-- Script pour effet 3D dynamique -->
+<script>
+document.querySelectorAll(".mylist-card").forEach((card, i) => {
+  // animation d'entrée
+  card.style.animationDelay = `${i * 0.15}s`;
+
+  // effet flottant 3D
+  card.addEventListener("mousemove", e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * 6; 
+    const rotateY = ((x - centerX) / centerX) * -6;
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+  });
+  card.addEventListener("mouseleave", () => {
+    card.style.transform = "rotateX(0) rotateY(0) scale(1)";
+  });
+});
+</script>
+</div>
+<!-- MODAL DE CONFIRMATION -->
+<div id="confirm-modal" class="modal">
+  <div class="modal-content">
+    <h2>Confirmation</h2>
+    <p>Voulez-vous vraiment retirer cette série de votre liste ?</p>
+    <div class="modal-actions">
+      <button id="cancel-btn">Annuler</button>
+      <button id="confirm-btn">Retirer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast-container"></div>
+
+</body>
+</html>

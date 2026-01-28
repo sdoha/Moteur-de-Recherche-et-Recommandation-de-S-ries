@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ serie['name'] }} – SUBSTREAM</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/series.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+</head>
+
+<body data-serie-id="{{ serie['id'] }}">
+  <div class="page">
+    <!-- HEADER -->
+    <header>
+      <div class="logo">SUBSTREAM</div>
+      <nav>
+        <a href="{{ url_for('index') }}">Accueil</a>
+        <a href="{{ url_for('maliste') }}">Ma Liste</a>
+        <a href="{{ url_for('mesnotations') }}">Mes notations</a>
+      </nav>
+      {% if session.get('user') %}
+        <a class="btn" href="{{ url_for('logout') }}">Se déconnecter</a>
+      {% else %}
+        <a class="btn" href="{{ url_for('login') }}">Se connecter</a>
+      {% endif %}
+    </header>
+
+    <!-- HERO DETAIL -->
+    <section class="hero-detail" style="background-image:url('{{ serie['image_url'] }}')">
+      <div class="hero-overlay"></div>
+      <div class="hero-inner">
+        <div class="hero-content">
+          <h1 class="serie-title">{{ serie['name'] }}</h1>
+
+          <div class="synopsis-container">
+            <p id="synopsis">{{ serie['synopsis'] }}</p>
+            <span id="expandSynopsis" class="expand-hint">...</span>
+          </div>
+
+          <div class="actions">
+            <button
+              id="listBtn"
+              class="list-btn {% if in_list %}in-list{% endif %}"
+              data-serie-id="{{ serie['id'] }}"
+              data-serie-name="{{ serie['name'] }}"
+            >
+              {% if in_list %}
+                <span>&#10003;</span> Dans ma liste
+              {% else %}
+                <span>+</span> Ajouter à ma liste
+              {% endif %}
+            </button>
+
+            <div
+              class="rating-container"
+              id="rating"
+              data-serie-name="{{ serie['name'] }}"
+              data-user-rating="{{ user_rating if user_rating else 0 }}"
+            >
+              {% for i in range(1, 6) %}
+              <span
+                class="star-btn {% if user_rating and i <= user_rating %}active{% endif %}"
+                data-value="{{ i }}"
+                tabindex="0"
+                role="button"
+                aria-label="Noter {{ i }} sur 5"
+              >★</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-poster">
+          <img src="{{ serie['image_url'] }}" alt="Affiche {{ serie['name'] }}">
+        </div>
+      </div>
+    </section>
+
+    <!-- SIMILAIRES (remplis via /api/similar/<id> en JS) -->
+    <section id="similarSection" class="recommend-section">
+      <h2>Séries similaires</h2>
+      <div id="similarContainer" class="recommend-grid"></div>
+    </section>
+
+    {% include "footer.html" %}
+  </div>
+
+  <div id="toast-container"></div>
+  <!-- Script page détail -->
+  <script src="{{ url_for('static', filename='js/series_detail.js') }}" defer></script>
+</body>
+</html>
+
